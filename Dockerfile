@@ -1,20 +1,19 @@
-# Utiliza una imagen base de Python
-FROM python:3.9-slim
+# Usa una imagen base de Python 3.10
+FROM python:3.10
+
+# Instala las dependencias del sistema necesarias
+RUN apt-get update && \
+    apt-get install -y libgl1-mesa-glx && \
+    rm -rf /var/lib/apt/lists/*
 
 # Establece el directorio de trabajo dentro del contenedor
 WORKDIR /app
 
-# Copia el archivo requirements.txt al directorio de trabajo
-COPY requirements.txt .
+# Copia todos los archivos locales al directorio de trabajo del contenedor
+COPY . /app
 
-# Instala las dependencias listadas en requirements.txt
+# Instala las dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia todos los archivos del proyecto al directorio de trabajo
-COPY . .
-
-# Expone el puerto 7860, que es el puerto por defecto que utiliza Gradio
-EXPOSE 7860
-
-# Comando para ejecutar la aplicación
+# Define el comando para ejecutar la aplicación
 CMD ["python", "app.py"]
